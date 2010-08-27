@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="jquery-1.4.2.min.js" type="text/javascript" charset="utf-8"></script>
+  <script type="text/javascript" charset="utf-8">
+
+  safari.application.addEventListener("message", post_link, false);
+
+  function post_link(msgEvent) {
+    if(msgEvent.name == 'link') {
+      var url = msgEvent.message,
+          username = safari.extension.secureSettings.username,
+          password = safari.extension.secureSettings.password;
+      
+      if(username == '') username = undefined;
+      if(password == '') password = undefined;
+      
+      if(username && password) {
+        jQuery.ajax({
+          type: 'POST',
+          url: "https://www.instapaper.com/api/add",
+          data: {
+            url: url,
+            username: username,
+            password: password
+          },
+          success: function () {
+            alert('Post saved in Instapaper');
+          },
+          error: function () {
+            alert("Error. Check your Instapaper Credentials:\n  Safari Preferences > Extensions > Planetakipaper");
+          }
+        });
+      } else {
+        alert("Setup your Instapaper Credentials:\n  Safari Preferences > Extensions > Planetakipaper");
+      }
+    }
+  }
+  </script>
+</head>
+<body>
+</body>
+</html>
